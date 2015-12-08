@@ -5,18 +5,40 @@
 
 Ubuntu 12.04 with Python 2.7
 
-安装依赖包
+安装构建依赖包
 
-    apt-get install build-essential python-dev
+    apt-get install python-dev build-essential
+    
+安装 Xvfb
+
+    apt-get install xvfb
 
 安装 pip
 
-    weget https://bootstrap.pypa.io/get-pip.py
+    wget https://bootstrap.pypa.io/get-pip.py
     python get-pip.py
 
-安装 PySide
+安装 SIP
 
-    pip install pyside
+下载地址：<https://www.riverbankcomputing.com/software/sip/download>
+
+    wget http://sourceforge.net/projects/pyqt/files/sip/sip-<version>/sip-<version>.tar.gz
+    tar -xvf sip-<version>.tar.gz
+    cd sip-<version>
+    python configure.py
+    make
+    make install
+
+安装 PyQt4
+
+下载地址：<https://riverbankcomputing.com/software/pyqt/download>
+
+    wget http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-<version>/PyQt-x11-gpl-<version>.tar.gz
+    tar -xvf PyQt-x11-gpl-<version>.tar.gz
+    cd PyQt-x11-gpl-<version>
+    python configure.py
+    make
+    make install
 
 安装 Ghost.py
 
