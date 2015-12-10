@@ -47,7 +47,7 @@ class Weibo(object):
             self.start()
             self.login()
      
-     def search(self, keyword, page_count=1):
+    def search(self, keyword, page_count=1):
         if self.session:
             for page_num in xrange(1,page_count):
                 page_param = "&page=" + str(page_num)
