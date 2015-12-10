@@ -29,7 +29,7 @@ class Weibo(object):
 
     def login(self):
         if self.session:
-            page, extra_resources = session.open("https://passport.weibo.cn/signin/login")
+            page, extra_resources = self.session.open("https://passport.weibo.cn/signin/login")
             assert page.http_status == 200
             self.session.wait_for_page_loaded()
 
@@ -42,7 +42,7 @@ class Weibo(object):
             self.session.wait_for_text("Anthony")
 
             # save cookies
-            session.save_cookies(path.abspath('cookies'))
+            self.session.save_cookies(path.abspath('cookies'))
         else:
             self.start()
             self.login()
@@ -51,12 +51,12 @@ class Weibo(object):
         if self.session:
             for page_num in xrange(1,page_count):
                 page_param = "&page=" + str(page_num)
-                page, extra_resources = session.open("http://s.weibo.com/weibo/" + keyword + page_param)
+                page, extra_resources = self.session.open("http://s.weibo.com/weibo/" + keyword + page_param)
                 assert page.http_status == 200
                 self.session.wait_for_page_loaded()
 
                 # parse weibo text
-                raw_data = session.content.encode('utf-8')
+                raw_data = self.session.content.encode('utf-8')
                 content = BeautifulSoup(raw_data, 'html.parser')
                 comments = content.find_all('p', class_='comment_txt')
                 for comment in comments:
