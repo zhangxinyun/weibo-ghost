@@ -29,6 +29,8 @@ class Weibo(object):
 
     def login(self):
         if self.session:
+            print "login start"
+
             page, extra_resources = self.session.open("https://passport.weibo.cn/signin/login")
             assert page.http_status == 200
             self.session.wait_for_page_loaded()
@@ -43,17 +45,24 @@ class Weibo(object):
 
             # save cookies
             self.session.save_cookies(path.abspath('cookies'))
+
+            print "login end"
         else:
             self.start()
             self.login()
      
     def search(self, keyword, page_count=1):
         if self.session:
+            print "search start"
+
             for page_num in xrange(1,page_count):
                 page_param = "&page=" + str(page_num)
-                page, extra_resources = self.session.open("http://s.weibo.com/weibo/" + keyword + page_param)
+                url = "http://s.weibo.com/weibo/" + keyword + page_param
+
+                print "searching " + url
+
+                page, extra_resources = self.session.open(url, timeout=20)
                 assert page.http_status == 200
-                self.session.wait_for_page_loaded()
 
                 # parse weibo text
                 raw_data = self.session.content.encode('utf-8')
@@ -62,7 +71,9 @@ class Weibo(object):
                 for comment in comments:
                     print comment.get_text()
 
-                sleep()
+                sleep(0.01)
+
+            print "search end"
         else:
             self.start()
             self.login()
