@@ -31,50 +31,50 @@ class Weibo(object):
         if self.session:
             print "login start"
 
-            page, extra_resources = self.session.open("https://passport.weibo.cn/signin/login")
-            assert page.http_status == 200
-            self.session.wait_for_page_loaded()
+            if path.exist(path.abspath('cookies')):
+                self.session.load_cookies(path.abspath('cookies'))
+            else:
+                page, extra_resources = self.session.open("https://passport.weibo.cn/signin/login")
+                self.session.wait_for_page_loaded()
 
-            # login
-            self.session.set_field_value('#loginName', self.config["username"])
-            self.session.set_field_value('#loginPassword', self.config["password"])
-            self.session.click('#loginAction')
+                # login
+                self.session.set_field_value('#loginName', self.config["username"])
+                self.session.set_field_value('#loginPassword', self.config["password"])
+                self.session.click('#loginAction')
 
-            # wait for login
-            self.session.wait_for_text("Anthony")
+                # wait for login
+                self.session.wait_for_text("Anthony")
 
-            # save cookies
-            self.session.save_cookies(path.abspath('cookies'))
+                # save cookies
+                self.session.save_cookies(path.abspath('cookies'))
+
+            sleep(10)
 
             print "login end"
-        else:
-            self.start()
-            self.login()
      
     def search(self, keyword, page_count=1):
         if self.session:
             print "search start"
 
             for page_num in xrange(1,page_count):
-                page_param = "&page=" + str(page_num)
-                url = "http://s.weibo.com/weibo/" + keyword + page_param
+                try:
+                    page_param = "&page=" + str(page_num)
+                    url = "http://s.weibo.com/weibo/" + keyword + page_param
 
-                print "searching " + url
+                    print "searching " + url
 
-                page, extra_resources = self.session.open(url, timeout=20)
-                assert page.http_status == 200
+                    page, extra_resources = self.session.open(url)
 
-                # parse weibo text
-                raw_data = self.session.content.encode('utf-8')
-                content = BeautifulSoup(raw_data, 'html.parser')
-                comments = content.find_all('p', class_='comment_txt')
-                for comment in comments:
-                    print comment.get_text()
+                    self.session.wait_for_selector(".s_weibo", timeout=60)
 
-                sleep(0.01)
+                    # parse weibo text
+                    raw_data = self.session.content.encode('utf-8')
+                    content = BeautifulSoup(raw_data, 'html.parser')
+                    comments = content.select('.s_weibo p')
+                    for comment in comments:
+                        print comment.get_text()
+                
+                except Exception, e:
+                    print "error"
 
             print "search end"
-        else:
-            self.start()
-            self.login()
-            self.search(keyword)

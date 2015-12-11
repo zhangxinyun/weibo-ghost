@@ -3,4 +3,4 @@ from weibo import Weibo
 wb = Weibo()
 wb.start()
 wb.login()
-wb.search("python", page_count=10)
+wb.search("普元", page_count=10)
