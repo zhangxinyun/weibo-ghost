@@ -44,3 +44,26 @@ Ubuntu 12.04 with Python 2.7
 
     pip install ghost.py --pre
   
+## 使用说明
+
+导入 *Weibo* 类，并实例化：
+
+    from weibo import Weibo
+    wb = Weibo()
+
+### 用户登录
+
+编辑 *conf.yml* 文件，输入新浪微博账号和密码：
+
+    username: AnthonyLi
+    password: secret
+
+执行 login 方法：
+
+    wb.login()
+
+登录成功后，会在项目根目录下生成一个 cookies 文件
+
+### 搜索
+
+TODO
