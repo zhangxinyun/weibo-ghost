@@ -31,7 +31,7 @@ class Weibo(object):
         if self.session:
             print "login start"
 
-            if path.exist(path.abspath('cookies')):
+            if path.exists(path.abspath('cookies')):
                 self.session.load_cookies(path.abspath('cookies'))
             else:
                 page, extra_resources = self.session.open("https://passport.weibo.cn/signin/login")
@@ -56,6 +56,8 @@ class Weibo(object):
         if self.session:
             print "search start"
 
+            count = 0
+
             for page_num in xrange(1,page_count):
                 try:
                     page_param = "&page=" + str(page_num)
@@ -73,8 +75,12 @@ class Weibo(object):
                     comments = content.select('.s_weibo p')
                     for comment in comments:
                         print comment.get_text()
+                        count = count + 1
                 
                 except Exception, e:
                     print "error"
 
+                sleep(10)
+
             print "search end"
+            print "total: " + str(count)
